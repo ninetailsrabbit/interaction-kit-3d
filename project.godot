@@ -10,7 +10,9 @@ config_version=5
 
 [application]
 
-config/name="godot-plugin-template"
+config/name="Interaction Kit 3D"
+config/description="A versatile interaction toolkit for 3D worlds. Easily create dynamic interactions like picking up, throwing, and more."
+config/version="1.0.0"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 

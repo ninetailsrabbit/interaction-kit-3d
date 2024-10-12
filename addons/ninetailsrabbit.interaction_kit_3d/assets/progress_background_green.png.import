@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qjmv3cxry8wu"
-path="res://.godot/imported/progress-background.png-998a5bde492cb044f40021717cd2a939.ctex"
+uid="uid://bdf47suvxkr8l"
+path="res://.godot/imported/progress_background_green.png-20072761695e9a8a5a49bf088e84aab2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/my_plugin/assets/progress-background.png"
-dest_files=["res://.godot/imported/progress-background.png-998a5bde492cb044f40021717cd2a939.ctex"]
+source_file="res://addons/ninetailsrabbit.interaction_kit_3d/assets/progress_background_green.png"
+dest_files=["res://.godot/imported/progress_background_green.png-20072761695e9a8a5a49bf088e84aab2.ctex"]
 
 [params]
 
