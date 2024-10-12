@@ -31,11 +31,11 @@ signal dropped_grabbable(body: Grabbable3D)
 @export var push_wave_ability: bool = false
 @export_group("Interactor")
 ## The raycast that interacts with grabbables to detect them
-@export var grabbable_interactor: GrabbableRayCastInteractor
+@export var grabbable_interactor: GrabbableRayCastInteractor3D
 ## The current distance applied to the interactor instead of manually change it on raycast properties
 @export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance = 6.0:
 	set(value):
-		if grabbable_interactor is GrabbableRayCastInteractor and grabbable_interactor_distance != value:
+		if grabbable_interactor is GrabbableRayCastInteractor3D and grabbable_interactor_distance != value:
 			grabbable_interactor_distance = clamp(value, 0.1, 1000.0)
 			_prepare_grabbable_interactor(grabbable_interactor, grabbable_interactor_distance)
 			
@@ -171,7 +171,7 @@ func _prepare_available_slots():
 #endregion	
 
 
-func _prepare_grabbable_interactor(interactor: GrabbableRayCastInteractor, distance: float = grabbable_interactor_distance):
+func _prepare_grabbable_interactor(interactor: GrabbableRayCastInteractor3D, distance: float = grabbable_interactor_distance):
 	interactor.target_position = Vector3.FORWARD * distance
 
 
