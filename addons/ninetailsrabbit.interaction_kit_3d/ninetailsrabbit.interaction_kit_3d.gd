@@ -7,6 +7,9 @@ var update_notify_tool_instance: Node
 
 func _enter_tree() -> void:
 	MyPluginSettings.set_update_notification()
+	MyPluginSettings.set_interactable_collision_layer()
+	MyPluginSettings.set_grabbable_collision_layer()
+	
 	_setup_updater()
 	
 	if not DirAccess.dir_exists_absolute(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath):

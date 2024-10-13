@@ -73,6 +73,8 @@ static func is_update_notification_enabled() -> bool:
 
 static func remove_settings() -> void:
 	remove_setting(UpdateNotificationSetting)
+	remove_setting(InteractablesCollisionLayerSetting)
+	remove_setting(GrabbablesCollisionLayerSetting)
 
 
 static func remove_setting(name: String) -> void:
