@@ -68,10 +68,10 @@ func on_child_entered(child: Node) -> void:
 	elif child is Grabbable3D:
 		_connect_grabbable(child as Grabbable3D)
 	else:
-		for interactable: Interactable3D in PluginUtilities.find_nodes_of_custom_class(child, Interactable3D):
+		for interactable: Interactable3D in InteractionKit3DPluginUtilities.find_nodes_of_custom_class(child, Interactable3D):
 			_connect_interactable(interactable)
 			
-		for grabbable: Grabbable3D in PluginUtilities.find_nodes_of_custom_class(child, Grabbable3D):
+		for grabbable: Grabbable3D in InteractionKit3DPluginUtilities.find_nodes_of_custom_class(child, Grabbable3D):
 			_connect_grabbable(grabbable)
 
 

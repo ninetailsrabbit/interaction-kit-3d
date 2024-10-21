@@ -29,7 +29,7 @@ func _ready() -> void:
 
 @warning_ignore("return_value_discarded")
 func run_update(progress_steps: int = 5, message: String = "Press 'Start Update' to start!") -> void:
-	if PluginUtilities.is_valid_url(download_url):
+	if _is_valid_url(download_url):
 		show()
 		set_process(true)
 		get_cancel_button().disabled = true
@@ -148,9 +148,9 @@ func on_http_request_request_completed(result: int, response_code: int, headers:
 			
 			if MyPluginSettings.DebugMode:
 				if DirAccess.dir_exists_absolute(MyPluginSettings.PluginDebugDirectoryPath):
-					PluginUtilities.remove_files_recursive(MyPluginSettings.PluginDebugDirectoryPath)
+					_remove_files_recursive(MyPluginSettings.PluginDebugDirectoryPath)
 			else:
-				PluginUtilities.remove_files_recursive(MyPluginSettings.PluginBasePath)
+				_remove_files_recursive(MyPluginSettings.PluginBasePath)
 				
 			EditorInterface.get_resource_filesystem().scan()
 			
@@ -159,9 +159,9 @@ func on_http_request_request_completed(result: int, response_code: int, headers:
 			if MyPluginSettings.DebugMode:
 				if not DirAccess.dir_exists_absolute(MyPluginSettings.PluginDebugDirectoryPath):
 					DirAccess.make_dir_absolute(MyPluginSettings.PluginDebugDirectoryPath)
-				PluginUtilities.copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, MyPluginSettings.PluginDebugDirectoryPath)
+				_copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, MyPluginSettings.PluginDebugDirectoryPath)
 			else:
-				PluginUtilities.copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, "res://")
+				_copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, "res://")
 				
 			EditorInterface.get_resource_filesystem().scan()
 			
@@ -175,3 +175,80 @@ func on_http_request_request_completed(result: int, response_code: int, headers:
 			enable_plugin()
 			hide()
 			update_finished.emit()
+
+
+#region Utils
+func _is_valid_url(url: String) -> bool:
+	var regex = RegEx.new()
+	var url_pattern = "/(https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?\\/[a-zA-Z0-9]{2,}|((https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?)|(https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}(\\.[a-zA-Z0-9]{2,})?/g"
+	regex.compile(url_pattern)
+	
+	return regex.search(url) != null
+
+
+func _copy_directory_recursive(from_dir :String, to_dir :String) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("copy_directory_recursive: directory not found '%s'" % from_dir)
+		return false
+		
+	if not DirAccess.dir_exists_absolute(to_dir):
+		
+		var err := DirAccess.make_dir_recursive_absolute(to_dir)
+		if err != OK:
+			push_error("copy_directory_recursive: Can't create directory '%s'. Error: %s" % [to_dir, error_string(err)])
+			return false
+			
+	var source_dir := DirAccess.open(from_dir)
+	var dest_dir := DirAccess.open(to_dir)
+	
+	if source_dir != null:
+		source_dir.list_dir_begin()
+		var next := "."
+
+		while next != "":
+			next = source_dir.get_next()
+			if next == "" or next == "." or next == "..":
+				continue
+			var source := source_dir.get_current_dir() + "/" + next
+			var dest := dest_dir.get_current_dir() + "/" + next
+			
+			if source_dir.current_is_dir():
+				_copy_directory_recursive(source + "/", dest)
+				continue
+				
+			var err := source_dir.copy(source, dest)
+			
+			if err != OK:
+				push_error("_copy_directory_recursive: Error checked copy file '%s' to '%s'" % [source, dest])
+				return false
+				
+		return true
+	else:
+		push_error("copy_directory_recursive: Directory not found: " + from_dir)
+		return false
+
+
+func _remove_files_recursive(path: String, regex: RegEx = null) -> void:
+	var directory = DirAccess.open(path)
+	
+	if DirAccess.get_open_error() == OK:
+		directory.list_dir_begin()
+		
+		var file_name = directory.get_next()
+		
+		while file_name != "":
+			if directory.current_is_dir():
+				_remove_files_recursive(directory.get_current_dir().path_join(file_name), regex)
+			else:
+				if regex != null:
+					if regex.search(file_name):
+						directory.remove(file_name)
+				else:
+					directory.remove(file_name)
+					
+			file_name = directory.get_next()
+		
+		directory.remove(path)
+	else:
+		push_error("remove_recursive: An error %s happened open directory: %s " % [DirAccess.get_open_error(), path])
+#endregion

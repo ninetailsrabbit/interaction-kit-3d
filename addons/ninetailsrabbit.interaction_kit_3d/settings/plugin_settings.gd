@@ -4,7 +4,7 @@ class_name MyPluginSettings extends RefCounted
 const PluginPrefixName: String = "ninetailsrabbit.interaction_kit_3d" ## The folder name
 const GitRepositoryName: String = "interaction-kit-3d"
 
-static var PluginName: String = "MyPlugin"
+static var PluginName: String = "InteractionKit3D"
 static var PluginProjectName: String = ProjectSettings.get_setting("application/config/name")
 static var PluginBasePath: String = "res://addons/%s" % PluginPrefixName
 static var PluginLocalConfigFilePath = "%s/plugin.cfg" % PluginBasePath

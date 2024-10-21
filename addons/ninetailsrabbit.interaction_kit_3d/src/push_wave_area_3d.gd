@@ -70,8 +70,8 @@ func push_bodies_on_range():
 	for body: RigidBody3D in get_overlapping_bodies().filter(func(detected_body): return detected_body is RigidBody3D and not bodies_pushed.has(detected_body.name)):
 		var upward_offset = Vector3.ZERO if max_upward_force == 0 else Vector3.UP * rng.randf_range(min_upward_force, max_upward_force)
 		bodies_pushed[body.name] = body
-		body.angular_velocity = PluginUtilities.generate_3d_random_fixed_direction() * rng.randf_range(0.5, 1.0)
-		body.apply_impulse(PluginUtilities.rotate_horizontal_random(direction) * rng.randf_range(min_push_force, max_push_force), -body.position.normalized() + upward_offset)
+		body.angular_velocity = InteractionKit3DPluginUtilities.generate_3d_random_fixed_direction() * rng.randf_range(0.5, 1.0)
+		body.apply_impulse(InteractionKit3DPluginUtilities.rotate_horizontal_random(direction) * rng.randf_range(min_push_force, max_push_force), -body.position.normalized() + upward_offset)
 
 	active = bodies_pushed.size() < pushable_bodies
 	
