@@ -14,6 +14,7 @@ func _enter_tree() -> void:
 	exclude_parent = true
 	collide_with_areas = false
 	collide_with_bodies = true
+	collision_mask = 1 | ProjectSettings.get_setting(MyPluginSettings.GrabbablesCollisionLayerSetting)
 
 
 func _physics_process(_delta):

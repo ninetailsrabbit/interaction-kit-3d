@@ -161,7 +161,7 @@ func on_http_request_request_completed(result: int, response_code: int, headers:
 					DirAccess.make_dir_absolute(MyPluginSettings.PluginDebugDirectoryPath)
 				_copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, MyPluginSettings.PluginDebugDirectoryPath)
 			else:
-				_copy_directory_recursive(MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, "res://")
+				_copy_directory_recursive("%s/addons/%s" % [MyPluginSettings.PluginTemporaryReleaseUpdateDirectoryPath, MyPluginSettings.PluginPrefixName], "res://addons/%s" % MyPluginSettings.PluginPrefixName)
 				
 			EditorInterface.get_resource_filesystem().scan()
 			
