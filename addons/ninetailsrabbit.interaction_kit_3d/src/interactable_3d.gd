@@ -1,13 +1,12 @@
 class_name Interactable3D extends Area3D
 
-const GroupName = "interactables-3d"
+const GroupName: StringName = &"interactables"
 
-signal interacted()
-signal canceled_interaction()
-signal focused()
-signal unfocused()
-signal interaction_limit_reached()
-
+signal interacted
+signal canceled_interaction
+signal focused
+signal unfocused
+signal interaction_limit_reached
 
 
 enum OutlineMode {
@@ -38,7 +37,7 @@ enum OutlineMode {
 @export_category("Edge shader") # https://www.videopoetics.com/tutorials/pixel-perfect-outline-shaders-unity/
 @export var outline_shader_color: Color = Color.WHITE
 @export var outline_width: float = 2.0
-@export var outline_shader: Shader = preload("res://addons/ninetailsrabbit.interaction_kit_3d/src/outline/pixel_perfect_outline.gdshader")
+@export var outline_shader: Shader = preload("res://addons/ninetailsrabbit.interaction_kit_3d/src/shaders/pixel_perfect_outline.gdshader")
 @export_category("Inverted hull")
 @export var outline_hull_color: Color = Color.WHITE
 @export_range(0, 16, 0.01) var outline_grow_amount: float = 0.02
@@ -75,17 +74,19 @@ func _ready() -> void:
 	interacted.connect(on_interacted)
 	focused.connect(on_focused)
 	unfocused.connect(on_unfocused)
+	canceled_interaction.connect(on_canceled_interaction)
+	
+	times_interacted = 0
 	
 	
 func activate() -> void:
 	priority = 3
-	collision_layer = ProjectSettings.get_setting(MyPluginSettings.InteractablesCollisionLayerSetting)
+	collision_layer =  ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting)
 	collision_mask = 0
 	monitorable = true
 	monitoring = false
 	
 	can_be_interacted = true
-	times_interacted = 0
 	
 	
 func deactivate() -> void:
@@ -140,12 +141,21 @@ func _remove_outline_shader() -> void:
 func on_interacted() -> void:
 	if disable_after_interaction:
 		deactivate()
-		
-		
+	
+	_remove_outline_shader()
+
+
 func on_focused() -> void:
 	_apply_outline_shader()
-
+	
 
 func on_unfocused() -> void:
+	_remove_outline_shader()
+
+
+func on_canceled_interaction() -> void:
+	if times_interacted < number_of_times_can_be_interacted:
+		activate()
+		
 	_remove_outline_shader()
 #endregion

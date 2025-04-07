@@ -8,13 +8,22 @@
 
 config_version=5
 
+[Interaction Kit 3D]
+
+config/ninetailsrabbit.interaction_kit_3d/interactables_collision_layer=6
+config/ninetailsrabbit.interaction_kit_3d/grabbables_collision_layer=7
+
 [application]
 
 config/name="Interaction Kit 3D"
 config/description="A versatile interaction toolkit for 3D worlds. Easily create dynamic interactions like picking up, throwing, and more."
 config/version="1.0.3"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/ninetailsrabbit.interaction_kit_3d/plugin.cfg")
 
 [rendering]
 

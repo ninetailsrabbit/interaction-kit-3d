@@ -48,3 +48,43 @@ static func find_nodes_of_custom_class(node: Node, class_to_find: Variant) -> Ar
 			result.append_array(find_nodes_of_custom_class(child, class_to_find))
 	
 	return result
+
+## Only works for native custom class not for GDScriptNativeClass
+## Example NodeTraversal.first_node_of_custom_class(self, MachineState)
+static func first_node_of_custom_class(node: Node, class_to_find: GDScript):
+	if node.get_child_count() == 0:
+		return null
+
+	for child: Node  in node.get_children():
+		if child.get_script() == class_to_find:
+			return child
+	
+	return null
+	
+	
+static func first_node_of_type(node: Node, type_to_find: Node):
+	if node.get_child_count() == 0:
+		return null
+
+	for child: Node  in node.get_children():
+		if child.is_class(type_to_find.get_class()):
+			type_to_find.free()
+			return child
+	
+	type_to_find.free()
+	
+	return null
+	
+	
+static func camera_forward_direction(camera: Camera3D) -> Vector3:
+	return Vector3.FORWARD.z * camera.global_transform.basis.z.normalized()
+
+
+static func create_physics_timer(wait_time: float = 1.0, autostart: bool = false, one_shot: bool = false) -> Timer:
+	var timer = Timer.new()
+	timer.wait_time = wait_time
+	timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
+	timer.autostart = autostart
+	timer.one_shot = one_shot
+	
+	return timer

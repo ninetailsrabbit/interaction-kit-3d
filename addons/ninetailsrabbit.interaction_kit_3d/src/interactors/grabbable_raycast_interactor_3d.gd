@@ -1,20 +1,17 @@
+## This interactor only detects the grabbables in the world as the Grabber3D is the one that make the actions
 class_name GrabbableRayCastInteractor3D extends RayCast3D
-
-@export var interact_action: String = "interact"
-@export var input_action_to_cancel: String = "cancel_interaact"
 
 var focused: bool = false
 var interacting: bool = false
 var current_grabbable: Grabbable3D
 
-## This interactor only detects the grabbables in the world as the Telekinesis3D is the one that make the actions
 
 func _enter_tree() -> void:
 	enabled = true
 	exclude_parent = true
 	collide_with_areas = false
 	collide_with_bodies = true
-	collision_mask = 1 | ProjectSettings.get_setting(MyPluginSettings.GrabbablesCollisionLayerSetting)
+	collision_mask = 1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
 
 
 func _physics_process(_delta):

@@ -1,7 +1,7 @@
 class_name RayCastInteractor3D extends RayCast3D
 
-@export var interact_input_action: String = "interact"
-@export var cancel_interact_input_action: String = "cancel_interact"
+@export var interact_input_action: StringName = &"interact"
+@export var cancel_interact_input_action: StringName = &"cancel_interact"
 
 
 var current_interactable: Interactable3D
@@ -10,22 +10,28 @@ var interacting: bool = false
 
 
 func _unhandled_input(_event: InputEvent):
-	if InputMap.has_action(interact_input_action) && Input.is_action_just_pressed(interact_input_action) and current_interactable and not interacting:
+	if InputMap.has_action(interact_input_action) \
+		and Input.is_action_just_pressed(interact_input_action) \
+		and current_interactable \
+		and not interacting:
+			
 		interact(current_interactable)
 		
 	
-	if InputMap.has_action(cancel_interact_input_action) && Input.is_action_just_pressed(cancel_interact_input_action) and current_interactable:
+	if InputMap.has_action(cancel_interact_input_action) \
+		and Input.is_action_just_pressed(cancel_interact_input_action) \
+		and current_interactable:
+			
 		cancel_interact(current_interactable)
-		
-	
+
 
 func _enter_tree():
 	enabled = true
 	exclude_parent = true
 	collide_with_areas = true
 	collide_with_bodies = true
-	collision_mask = 1 | ProjectSettings.get_setting(MyPluginSettings.InteractablesCollisionLayerSetting) | ProjectSettings.get_setting(MyPluginSettings.GrabbablesCollisionLayerSetting)
-
+	collision_mask = 1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting) | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting) 
+	
 
 func _physics_process(_delta):
 	var detected_interactable = get_collider() if is_colliding() else null
@@ -51,7 +57,8 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		interacting = false
 		focused = false
 		enabled = true
-				
+		current_interactable = null
+		
 		interactable.canceled_interaction.emit()
 
 
@@ -60,8 +67,8 @@ func focus(interactable: Interactable3D):
 	focused = true
 	
 	interactable.focused.emit()
-	
-	
+
+
 func unfocus(interactable: Interactable3D = current_interactable):
 	if interactable and focused:
 		current_interactable = null
@@ -70,10 +77,3 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		enabled = true
 		
 		interactable.unfocused.emit()
-		
-
-func on_canceled_interaction(_interactable: Interactable3D) -> void:
-	current_interactable = null
-	focused = false
-	interacting = false
-	enabled = true

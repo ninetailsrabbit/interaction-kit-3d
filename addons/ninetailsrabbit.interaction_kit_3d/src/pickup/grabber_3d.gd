@@ -15,16 +15,13 @@ signal dropped_grabbable(body: Grabbable3D)
 
 ## The available slots to put the grabbables when pulled
 @export var available_slots: Array[Marker3D] = []
-## The maximum mass from bodies this grabber can hold
 @export var mass_lift_force: float = 10.0
-## The maximum number of grabbables this grabber can hold at the same time, this takes priority over available_slots
-@export var max_number_of_grabbables: int = 1
 @export_group("Input Actions")
-@export var pull_input_action: String = "pull"
-@export var pull_area_input_action: String = "pull_area"
-@export var drop_input_action: String = "drop"
-@export var throw_input_action: String = "throw"
-@export var push_wave_input_action: String = "push_wave"
+@export var pull_input_action: StringName = &"pull"
+@export var pull_area_input_action: StringName = &"pull_area"
+@export var drop_input_action: StringName = &"drop"
+@export var throw_input_action: StringName = &"throw"
+@export var push_wave_input_action: StringName = &"push_wave"
 @export_group("Abilities")
 @export var pull_individual_ability: bool = true
 @export var pull_area_ability: bool = false
@@ -33,26 +30,31 @@ signal dropped_grabbable(body: Grabbable3D)
 ## The raycast that interacts with grabbables to detect them
 @export var grabbable_interactor: GrabbableRayCastInteractor3D
 ## The current distance applied to the interactor instead of manually change it on raycast properties
-@export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance = 6.0:
+@export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance: float = 6.0:
 	set(value):
-		if grabbable_interactor is GrabbableRayCastInteractor3D and grabbable_interactor_distance != value:
-			grabbable_interactor_distance = clamp(value, 0.1, 1000.0)
-			_prepare_grabbable_interactor(grabbable_interactor, grabbable_interactor_distance)
+		if grabbable_interactor is GrabbableRayCastInteractor3D \
+			and grabbable_interactor_distance != value:
+				
+			grabbable_interactor_distance = clamp(value, 0.1, 100.0)
+			_prepare_grabbable_interactor(grabbable_interactor_distance)
 			
 @export_group("Area detector")
 @export var grabbable_area_detector: Area3D:
 	set(value):
-		grabbable_area_detector = value
-		
-		if grabbable_area_detector is Area3D:
-			_prepare_grabbable_area_detector(grabbable_area_detector)
+		if value is Area3D:
+			grabbable_area_detector = value
+			_prepare_grabbable_area_detector()
 			
-	
+@export var max_number_of_grabbables: int = 2
+
 var active_grabbables: Array[ActiveGrabbable] = []
 
 
 func _input(_event: InputEvent) -> void:
-	if push_wave_ability and active_grabbables.is_empty() and InteractionKit3DPluginUtilities.action_just_pressed_and_exists(push_wave_input_action):
+	if push_wave_ability \
+		and active_grabbables.is_empty() \
+		and InteractionKit3DPluginUtilities.action_just_pressed_and_exists(push_wave_input_action):
+			
 		push_wave()
 		
 	if pull_individual_ability and InteractionKit3DPluginUtilities.action_just_pressed_and_exists(pull_input_action):
@@ -130,13 +132,18 @@ func drop_body(body: Grabbable3D) -> void:
 
 func push_wave():
 	if push_wave_ability:
-		add_child(PushWaveArea3D.new())
+		var wave = PushWaveArea3D.new(InteractionKit3DPluginUtilities.camera_forward_direction(get_viewport().get_camera_3d()))
+		add_child(wave)
+		wave.activate()
 	
 
 func get_near_grabbables() -> Array:
 	if grabbable_area_detector and grabbable_area_detector.monitoring:
 		var bodies := grabbable_area_detector.get_overlapping_bodies().filter(func(body): return body is Grabbable3D)
-		bodies.sort_custom(func(a: Grabbable3D, b: Grabbable3D): return InteractionKit3DPluginUtilities.global_distance_to_v3(a, self) <= InteractionKit3DPluginUtilities.global_distance_to_v3(b, self))
+		bodies.sort_custom(
+			func(a: Grabbable3D, b: Grabbable3D): 
+				return InteractionKit3DPluginUtilities.global_distance_to_v3(a, self) <= InteractionKit3DPluginUtilities.global_distance_to_v3(b, self))
+		
 		return bodies.slice(0, max_number_of_grabbables)
 		
 	return []
@@ -170,17 +177,18 @@ func _prepare_available_slots():
 
 #endregion	
 
+func _prepare_grabbable_interactor(distance: float = grabbable_interactor_distance):
+	if grabbable_interactor and distance >= 0.1:
+		grabbable_interactor.target_position = Vector3.FORWARD * distance
 
-func _prepare_grabbable_interactor(interactor: GrabbableRayCastInteractor3D, distance: float = grabbable_interactor_distance):
-	interactor.target_position = Vector3.FORWARD * distance
 
-
-func _prepare_grabbable_area_detector(area_detector: GrabbableAreaDetector3D):
-	area_detector.monitorable = false
-	area_detector.monitoring = true
-	area_detector.priority = 2
-	area_detector.collision_layer = 0
-	area_detector.collision_mask = ProjectSettings.get_setting(MyPluginSettings.GrabbablesCollisionLayerSetting)
+func _prepare_grabbable_area_detector():
+	if grabbable_area_detector:
+		grabbable_area_detector.monitorable = false
+		grabbable_area_detector.monitoring = true
+		grabbable_area_detector.priority = 2
+		grabbable_area_detector.collision_layer = 0
+		grabbable_area_detector.collision_mask = ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
 
 
 #region Signal callbacks

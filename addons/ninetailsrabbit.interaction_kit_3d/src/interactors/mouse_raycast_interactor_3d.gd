@@ -1,9 +1,9 @@
 class_name MouseRayCastInteractor3D extends Node3D
 
 @export var origin_camera: Camera3D
-@export var ray_length: float = 1000.0
+@export var ray_length: float = 100.0
 @export var interact_mouse_button = MOUSE_BUTTON_LEFT
-@export var cancel_interact_input_action: String = "cancel_interact"
+@export var cancel_interact_input_action: StringName = &"cancel_interaction"
 
 @onready var current_camera: Camera3D = origin_camera:
 	set(new_camera):
@@ -54,7 +54,9 @@ func get_detected_interactable():
 	
 	var ray_query = PhysicsRayQueryParameters3D.create(
 		from, 
-		to, 
+		to,
+		1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting) | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting) 
+
 	)
 	
 	ray_query.collide_with_areas = true
@@ -74,7 +76,7 @@ func interact(interactable: Interactable3D):
 		
 		interactable.interacted.emit()
 	
-	
+
 func cancel_interact(interactable: Interactable3D = current_interactable):
 	if interactable:
 		interacting = false
@@ -110,12 +112,12 @@ func return_to_original_camera() -> void:
 
 func activate() -> void:
 	set_process(true)
-	set_process_input(true)
+	set_process_unhandled_input(true)
 	
 
 func deactivate() -> void:
 	set_process(false)
-	set_process_input(false)
+	set_process_unhandled_input(false)
 	
 
 func on_canceled_interaction(_interactable: Interactable3D) -> void:
