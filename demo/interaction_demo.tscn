@@ -187,8 +187,8 @@ horizontal_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("1_dxgyk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-Move_Speed = 3.0
-Sprint_Speed = 6.0
+Move_Speed = 6.0
+Sprint_Speed = 9.0
 InputDictionary = {
 "Backward": "ui_down",
 "Escape": "ui_cancel",
@@ -268,6 +268,11 @@ size = Vector3(0.6, 6.1, 11.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, -0.35, -6.1)
 size = Vector3(0.6, 6.1, 11.2)
 
+[node name="Label3D" type="Label3D" parent="CSGBox3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1, -0.7)
+text = "[Q] TO SPAWN A FORCE WAVE"
+font_size = 64
+
 [node name="Table" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58069, 0.577512, -5.93794)
 use_collision = true
@@ -275,13 +280,13 @@ size = Vector3(4.16138, 1, 1)
 material = SubResource("StandardMaterial3D_h61s0")
 
 [node name="InteractableBox" type="MeshInstance3D" parent="Table"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.68069, 0.722488, -0.0620601)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.78069, 0.722488, -0.0620599)
 mesh = SubResource("BoxMesh_hlwqb")
 skeleton = NodePath("../..")
 
 [node name="Information" type="Label3D" parent="Table/InteractableBox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0707109, 0.4, -0.122473)
-text = "OUTLINE SHADER"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.263896, 0.4, -0.174237)
+text = "FOCUS OUTLINE SHADER"
 font_size = 16
 
 [node name="Interactable3D" type="Area3D" parent="Table/InteractableBox" node_paths=PackedStringArray("interactable_mesh")]
@@ -303,8 +308,8 @@ mesh = SubResource("BoxMesh_1d85j")
 skeleton = NodePath("../..")
 
 [node name="Information" type="Label3D" parent="Table/InteractableBox2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00340706, 0.4, -0.174118)
-text = "OUTLINE INVERTED HULL"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.096593, 0.4, -0.174118)
+text = "FOCUS OUTLINE INVERTED HULL"
 font_size = 16
 
 [node name="Interactable3D" type="Area3D" parent="Table/InteractableBox2" node_paths=PackedStringArray("interactable_mesh")]
@@ -405,6 +410,21 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 text = "0 times remaining"
 font_size = 16
 
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 8.5, 1, -2.4)
+text = "[E] TRANSPARENCY ON PULL"
+font_size = 24
+
+[node name="Label3D2" type="Label3D" parent="."]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 8.5, 1, -0.6)
+text = "[E] NO TRANSPARENCY ON PULL"
+font_size = 24
+
+[node name="Label3D3" type="Label3D" parent="."]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, 8.5, 1, 1.8)
+text = "[T] GRAB MULTIPLE OBJECTS"
+font_size = 24
+
 [node name="Grabbable3D" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.2, 0.4, -2.4)
 mass = 0.5
@@ -472,13 +492,12 @@ mesh = SubResource("BoxMesh_kxrn6")
 shape = SubResource("ConvexPolygonShape3D_lorkn")
 
 [node name="Grabbable3D6" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 6.6, 0.7, -2.4)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 8.7, 0.4, 0.9)
 script = ExtResource("9_x4fok")
 mesh_instance = NodePath("MeshInstance3D")
 metadata/_custom_type_script = "uid://ccrr86ssurjjf"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707111, 0, 0.0707102)
 mesh = SubResource("PrismMesh_1oqab")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D6"]
