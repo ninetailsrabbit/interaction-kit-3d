@@ -22,7 +22,7 @@ static var GrabbablesCollisionLayerSetting: String = PluginSettingsBasePath + "/
 
 ## Enable to test the updater without need to have a latest release version to trigger it
 static var DebugMode: bool = false
-
+static var GlobalInteractionEventsSingleton: String = "GlobalInteractionEvents"
 
 ## By default on layer 5
 static func set_interactable_collision_layer(interactable_layer: int = 6) -> void:

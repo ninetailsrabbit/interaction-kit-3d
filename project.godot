@@ -21,6 +21,10 @@ config/version="1.0.3"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GlobalInteractionEvents="*res://addons/ninetailsrabbit.interaction_kit_3d/src/global_interaction_events.gd"
+
 [display]
 
 window/size/viewport_width=1280

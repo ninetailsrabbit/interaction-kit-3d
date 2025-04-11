@@ -18,6 +18,13 @@ var focused: bool = false
 var interacting: bool = false
 var mouse_position: Vector2 = Vector2.ZERO
 
+var global_interaction_events
+
+
+func _enter_tree() -> void:
+	if get_tree().root.has_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton):
+		global_interaction_events = get_tree().root.get_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_processing() and current_camera is Camera3D:
@@ -75,6 +82,9 @@ func interact(interactable: Interactable3D):
 	if interactable and interactable.can_be_interacted:
 		interacting = true
 		interactable.interacted.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.interactable_interacted.emit(interactable)
 	
 
 func cancel_interact(interactable: Interactable3D = current_interactable):
@@ -83,7 +93,9 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		focused = false
 		
 		interactable.canceled_interaction.emit()
-		
+		if global_interaction_events:
+			global_interaction_events.interactable_canceled_interaction.emit(interactable)
+
 
 func focus(interactable: Interactable3D):
 	current_interactable = interactable
@@ -91,7 +103,10 @@ func focus(interactable: Interactable3D):
 	
 	interactable.focused.emit()
 	
-	
+	if global_interaction_events:
+		global_interaction_events.interactable_focused.emit(interactable)
+
+
 func unfocus(interactable: Interactable3D = current_interactable):
 	if interactable and focused:
 		current_interactable = null
@@ -99,6 +114,9 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		interacting = false
 
 		interactable.unfocused.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.interactable_unfocused.emit(interactable)
 
 
 func change_camera_to(new_camera: Camera3D) -> void:

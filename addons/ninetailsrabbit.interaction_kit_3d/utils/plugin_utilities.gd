@@ -89,7 +89,6 @@ static func create_physics_timer(wait_time: float = 1.0, autostart: bool = false
 	
 	return timer
 	
-	
 
 @warning_ignore("narrowing_conversion")
 static func layer_to_value(layer: int) -> int:

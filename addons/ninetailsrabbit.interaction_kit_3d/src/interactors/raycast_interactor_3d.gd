@@ -7,6 +7,7 @@ class_name RayCastInteractor3D extends RayCast3D
 var current_interactable: Interactable3D
 var focused: bool = false
 var interacting: bool = false
+var global_interaction_events
 
 
 func _unhandled_input(_event: InputEvent):
@@ -32,6 +33,9 @@ func _enter_tree():
 	collide_with_bodies = true
 	collision_mask = 1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting)) | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)) 
 	
+	if get_tree().root.has_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton):
+		global_interaction_events = get_tree().root.get_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton)
+
 
 func _physics_process(_delta):
 	var detected_interactable = get_collider() if is_colliding() else null
@@ -50,6 +54,9 @@ func interact(interactable: Interactable3D = current_interactable):
 		interacting = interactable.lock_player_on_interact
 		
 		interactable.interacted.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.interactable_interacted.emit(interactable)
 
 
 func cancel_interact(interactable: Interactable3D = current_interactable):
@@ -60,6 +67,9 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 		current_interactable = null
 		
 		interactable.canceled_interaction.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.interactable_canceled_interaction.emit(interactable)
 
 
 func focus(interactable: Interactable3D):
@@ -67,6 +77,9 @@ func focus(interactable: Interactable3D):
 	focused = true
 	
 	interactable.focused.emit()
+	
+	if global_interaction_events:
+		global_interaction_events.interactable_focused.emit(interactable)
 
 
 func unfocus(interactable: Interactable3D = current_interactable):
@@ -77,3 +90,6 @@ func unfocus(interactable: Interactable3D = current_interactable):
 		enabled = true
 		
 		interactable.unfocused.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.interactable_unfocused.emit(interactable)

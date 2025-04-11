@@ -5,6 +5,8 @@ var focused: bool = false
 var interacting: bool = false
 var current_grabbable: Grabbable3D
 
+var global_interaction_events
+
 
 func _enter_tree() -> void:
 	enabled = true
@@ -12,6 +14,9 @@ func _enter_tree() -> void:
 	collide_with_areas = false
 	collide_with_bodies = true
 	collision_mask = 1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting))
+	
+	if get_tree().root.has_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton):
+		global_interaction_events = get_tree().root.get_node(InteractionKit3DPluginSettings.GlobalInteractionEventsSingleton)
 
 
 func _physics_process(_delta):
@@ -30,8 +35,11 @@ func focus(grabbable: Grabbable3D):
 	focused = true
 	
 	grabbable.focused.emit()
-
 	
+	if global_interaction_events:
+		global_interaction_events.grabbable_focused.emit(grabbable)
+	
+
 func unfocus(grabbable: Grabbable3D = current_grabbable):
 	if grabbable and focused:
 		current_grabbable = null
@@ -40,3 +48,6 @@ func unfocus(grabbable: Grabbable3D = current_grabbable):
 		enabled = true
 		
 		grabbable.unfocused.emit()
+		
+		if global_interaction_events:
+			global_interaction_events.grabbable_unfocused.emit(grabbable)

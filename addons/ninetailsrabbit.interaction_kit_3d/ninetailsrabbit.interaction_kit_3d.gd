@@ -62,9 +62,12 @@ func _enter_tree() -> void:
 		preload("res://addons/ninetailsrabbit.interaction_kit_3d/src/doors/door.gd"),
 		preload("res://addons/ninetailsrabbit.interaction_kit_3d/assets/door.svg")
 	)
+	
+	add_autoload_singleton("GlobalInteractionEvents", "res://addons/ninetailsrabbit.interaction_kit_3d/src/global_interaction_events.gd")
 
 
 func _exit_tree() -> void:
+	remove_autoload_singleton("GlobalInteractionEvents")
 	remove_custom_type("Door3D")
 	
 	remove_custom_type("MouseRayCastInteractor3D")

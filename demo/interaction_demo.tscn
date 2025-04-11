@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://dalr5xxwsy6h1"]
+[gd_scene load_steps=46 format=3 uid="uid://dalr5xxwsy6h1"]
 
 [ext_resource type="Script" uid="uid://cpnbdadtjwity" path="res://demo/interaction_demo.gd" id="1_7ldwn"]
 [ext_resource type="PackedScene" uid="uid://c4lccs8l5darl" path="res://addons/godot4.3_fps_character_controller/Player/player.tscn" id="1_dxgyk"]
@@ -31,6 +31,8 @@ radius = 1.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxgyk"]
 albedo_color = Color(0.165657, 0.165656, 0.165656, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxrn6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h61s0"]
 albedo_color = Color(0.365338, 0.467013, 0.548151, 1)
@@ -120,6 +122,15 @@ points = PackedVector3Array(0.15, 0.15, 0.15, 0.15, 0.15, -0.15, -0.15, 0.15, 0.
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_lorkn"]
 points = PackedVector3Array(0.15, 0.15, 0.15, 0.15, 0.15, -0.15, -0.15, 0.15, 0.15, 0.15, -0.15, 0.15, 0.15, -0.15, -0.15, -0.15, 0.15, -0.15, -0.15, -0.15, 0.15, -0.15, -0.15, -0.15)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lorkn"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_1oqab"]
+material = SubResource("StandardMaterial3D_lorkn")
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4hf70"]
+points = PackedVector3Array(0, 0.2, 0.2, 0.2, -0.2, 0.2, 0, 0.2, -0.2, -0.2, -0.2, 0.2, 0.2, -0.2, -0.2, -0.2, -0.2, -0.2)
+
 [node name="InteractionDemo" type="Node3D"]
 script = ExtResource("1_7ldwn")
 
@@ -207,6 +218,7 @@ metadata/_custom_type_script = "uid://cjv0cckxt2gv4"
 script = ExtResource("6_cty7h")
 available_slots = [NodePath("Marker3D"), NodePath("Marker3D2"), NodePath("Marker3D3")]
 pull_area_ability = true
+push_wave_ability = true
 grabbable_interactor = NodePath("../GrabbableRayCastInteractor3D")
 grabbable_area_detector = NodePath("../GrabbableAreaDetector3D")
 max_number_of_grabbables = 3
@@ -234,6 +246,27 @@ debug_color = Color(0.692057, 0.49618, 0.0580749, 0.42)
 use_collision = true
 size = Vector3(25, 0.1, 25)
 material = SubResource("StandardMaterial3D_dxgyk")
+
+[node name="CSGBox3D" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999999, 2.7, 12.9)
+use_collision = true
+
+[node name="HitWall" type="CSGBox3D" parent="CSGBox3D"]
+use_collision = true
+size = Vector3(25.4, 5.4, 1)
+material = SubResource("StandardMaterial3D_kxrn6")
+
+[node name="SpawnPoint" type="Marker3D" parent="CSGBox3D/HitWall"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0999999, 1.7, -2.3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9, -0.35, -6.1)
+size = Vector3(0.6, 6.1, 11.2)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, -0.35, -6.1)
+size = Vector3(0.6, 6.1, 11.2)
 
 [node name="Table" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58069, 0.577512, -5.93794)
@@ -437,5 +470,19 @@ mesh = SubResource("BoxMesh_kxrn6")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D5"]
 shape = SubResource("ConvexPolygonShape3D_lorkn")
+
+[node name="Grabbable3D6" type="RigidBody3D" parent="." node_paths=PackedStringArray("mesh_instance")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 6.6, 0.7, -2.4)
+script = ExtResource("9_x4fok")
+mesh_instance = NodePath("MeshInstance3D")
+metadata/_custom_type_script = "uid://ccrr86ssurjjf"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Grabbable3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707111, 0, 0.0707102)
+mesh = SubResource("PrismMesh_1oqab")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grabbable3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707111, 0, 0.0707102)
+shape = SubResource("ConvexPolygonShape3D_4hf70")
 
 [editable path="Player"]
