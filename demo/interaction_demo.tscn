@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dalr5xxwsy6h1"]
+[gd_scene load_steps=27 format=3 uid="uid://dalr5xxwsy6h1"]
 
+[ext_resource type="Script" uid="uid://cpnbdadtjwity" path="res://demo/interaction_demo.gd" id="1_7ldwn"]
 [ext_resource type="PackedScene" uid="uid://c4lccs8l5darl" path="res://addons/godot4.3_fps_character_controller/Player/player.tscn" id="1_dxgyk"]
+[ext_resource type="Script" uid="uid://chbgr2vxyqimp" path="res://demo/dot_cursor.gd" id="2_guu8c"]
+[ext_resource type="Script" uid="uid://b13ku4ha6ywfi" path="res://addons/ninetailsrabbit.interaction_kit_3d/src/interactors/raycast_interactor_3d.gd" id="2_h61s0"]
+[ext_resource type="Script" uid="uid://v8xxtslsavt7" path="res://addons/ninetailsrabbit.interaction_kit_3d/src/interactable_3d.gd" id="5_hlwqb"]
+[ext_resource type="Script" uid="uid://y35nd1sndvan" path="res://demo/sphere_light.gd" id="6_1d85j"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dxgyk"]
-sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 
 [sub_resource type="Sky" id="Sky_h61s0"]
 sky_material = SubResource("ProceduralSkyMaterial_dxgyk")
@@ -12,22 +15,125 @@ sky_material = SubResource("ProceduralSkyMaterial_dxgyk")
 [sub_resource type="Environment" id="Environment_7ldwn"]
 background_mode = 2
 sky = SubResource("Sky_h61s0")
+ambient_light_source = 3
+ambient_light_color = Color(0.566263, 0.797861, 1, 1)
 tonemap_mode = 2
+ssr_enabled = true
+glow_enabled = true
+fog_sky_affect = 0.063
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxgyk"]
 albedo_color = Color(0.165657, 0.165656, 0.165656, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h61s0"]
-albedo_color = Color(1, 0.152941, 1, 1)
+albedo_color = Color(0.365338, 0.467013, 0.548151, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlwqb"]
+albedo_color = Color(0.415686, 0.25098, 0.141176, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hlwqb"]
+material = SubResource("StandardMaterial3D_hlwqb")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hlwqb"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1d85j"]
+albedo_color = Color(0.415686, 0.25098, 0.141176, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1d85j"]
+material = SubResource("StandardMaterial3D_1d85j")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1d85j"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgol2"]
+albedo_color = Color(1, 0.811765, 0.74902, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1d85j"]
+material = SubResource("StandardMaterial3D_qgol2")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hlwqb"]
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cty7h"]
+albedo_color = Color(1, 0.811765, 0.419608, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_cty7h"]
+material = SubResource("StandardMaterial3D_cty7h")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1d85j"]
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x4fok"]
+albedo_color = Color(0.607843, 0.0745098, 0.564706, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1oqab"]
+material = SubResource("StandardMaterial3D_x4fok")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qgol2"]
+radius = 0.25
 
 [node name="InteractionDemo" type="Node3D"]
+script = ExtResource("1_7ldwn")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_7ldwn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(3.9041e-06, -0.866027, 0.499998, -1.49012e-08, 0.499998, 0.866027, -1, -3.38851e-06, 1.93914e-06, -4.4, 3.3, 0)
 shadow_enabled = true
+
+[node name="InteractableInformation" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="InteractableInformation"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="InteractableInformation/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DotCursor" type="Control" parent="InteractableInformation/Control/CenterContainer"]
+layout_mode = 2
+script = ExtResource("2_guu8c")
+
+[node name="MarginContainer" type="MarginContainer" parent="InteractableInformation/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="InteractableInformation" type="RichTextLabel" parent="InteractableInformation/Control/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+bbcode_enabled = true
+text = "INTERACTABLE INFORMATION"
+fit_content = true
+horizontal_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("1_dxgyk")]
 Move_Speed = 3.0
@@ -45,6 +151,12 @@ InputDictionary = {
 Mouse_Sens = 0.1
 TiltThreshhold = 0.05
 
+[node name="RayCastInteractor3D" type="RayCast3D" parent="Player/Head/Camera3D" index="0"]
+target_position = Vector3(0, 0, -1.3)
+debug_shape_custom_color = Color(0.960935, 0.651945, 0.262363, 1)
+script = ExtResource("2_h61s0")
+metadata/_custom_type_script = "uid://b13ku4ha6ywfi"
+
 [node name="Floor" type="CSGBox3D" parent="."]
 use_collision = true
 size = Vector3(25, 0.1, 25)
@@ -55,5 +167,131 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58069, 0.577512, -2.63794)
 use_collision = true
 size = Vector3(4.16138, 1, 1)
 material = SubResource("StandardMaterial3D_h61s0")
+
+[node name="InteractableBox" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.1, 1.3, -2.7)
+mesh = SubResource("BoxMesh_hlwqb")
+
+[node name="Information" type="Label3D" parent="InteractableBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0707109, 0.4, -0.122473)
+text = "OUTLINE SHADER"
+font_size = 16
+
+[node name="Interactable3D" type="Area3D" parent="InteractableBox" node_paths=PackedStringArray("interactable_mesh")]
+script = ExtResource("5_hlwqb")
+id = "brown_bow"
+title = "Brown box shader"
+title_translation_key = "BROWN_BOX"
+interactable_mesh = NodePath("..")
+outline_shader_color = Color(0.180392, 1, 0.341176, 1)
+outline_hull_color = Color(0.180392, 1, 0.341176, 1)
+metadata/_custom_type_script = "uid://v8xxtslsavt7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableBox/Interactable3D"]
+shape = SubResource("BoxShape3D_hlwqb")
+
+[node name="InteractableBox2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, 1, 0.9, 1.3, -2.7)
+mesh = SubResource("BoxMesh_1d85j")
+
+[node name="Information" type="Label3D" parent="InteractableBox2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00340706, 0.4, -0.174118)
+text = "OUTLINE INVERTED HULL"
+font_size = 16
+
+[node name="Interactable3D" type="Area3D" parent="InteractableBox2" node_paths=PackedStringArray("interactable_mesh")]
+script = ExtResource("5_hlwqb")
+id = "brown_bow"
+title = "Brown box hull"
+title_translation_key = "BROWN_BOX"
+interactable_mesh = NodePath("..")
+outline_mode = 1
+outline_shader_color = Color(0.180392, 1, 0.341176, 1)
+outline_hull_color = Color(0.180392, 1, 0.341176, 1)
+metadata/_custom_type_script = "uid://v8xxtslsavt7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableBox2/Interactable3D"]
+shape = SubResource("BoxShape3D_1d85j")
+
+[node name="SphereLight" type="MeshInstance3D" parent="." node_paths=PackedStringArray("interactable_3d", "omni_light_3d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 1.5, -2.7)
+mesh = SubResource("SphereMesh_1d85j")
+script = ExtResource("6_1d85j")
+interactable_3d = NodePath("Interactable3D")
+omni_light_3d = NodePath("OmniLight3D")
+
+[node name="Interactable3D" type="Area3D" parent="SphereLight"]
+script = ExtResource("5_hlwqb")
+id = "sphere_light"
+title = "[E] Sphere light"
+metadata/_custom_type_script = "uid://v8xxtslsavt7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SphereLight/Interactable3D"]
+shape = SubResource("SphereShape3D_hlwqb")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SphereLight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.3)
+visible = false
+light_color = Color(1, 0.979824, 0.998358, 1)
+omni_range = 0.8
+
+[node name="LimitedSphereLight" type="MeshInstance3D" parent="." node_paths=PackedStringArray("interactable_3d", "omni_light_3d", "label_3d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.5, -2.7)
+mesh = SubResource("SphereMesh_cty7h")
+script = ExtResource("6_1d85j")
+interaction_times = 4
+interactable_3d = NodePath("Interactable3D")
+omni_light_3d = NodePath("OmniLight3D")
+label_3d = NodePath("Label3D")
+
+[node name="Interactable3D" type="Area3D" parent="LimitedSphereLight"]
+script = ExtResource("5_hlwqb")
+id = "sphere_light"
+title = "[E] Limited Sphere light"
+metadata/_custom_type_script = "uid://v8xxtslsavt7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LimitedSphereLight/Interactable3D"]
+shape = SubResource("SphereShape3D_1d85j")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="LimitedSphereLight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.3)
+visible = false
+light_color = Color(1, 0.979824, 0.998358, 1)
+omni_range = 0.8
+
+[node name="Label3D" type="Label3D" parent="LimitedSphereLight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+text = "0 times remaining"
+font_size = 16
+
+[node name="LimitedSphereLightDeactivation" type="MeshInstance3D" parent="." node_paths=PackedStringArray("interactable_3d", "omni_light_3d", "label_3d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1.5, -2.7)
+mesh = SubResource("SphereMesh_1oqab")
+script = ExtResource("6_1d85j")
+interaction_times = 3
+interactable_3d = NodePath("Interactable3D")
+omni_light_3d = NodePath("OmniLight3D")
+label_3d = NodePath("Label3D")
+
+[node name="Interactable3D" type="Area3D" parent="LimitedSphereLightDeactivation"]
+script = ExtResource("5_hlwqb")
+deactive_after_reach_interaction_limit = true
+id = "sphere_light"
+title = "[E] Limited Sphere light deactivate"
+metadata/_custom_type_script = "uid://v8xxtslsavt7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LimitedSphereLightDeactivation/Interactable3D"]
+shape = SubResource("SphereShape3D_qgol2")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="LimitedSphereLightDeactivation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.3)
+visible = false
+light_color = Color(1, 0.979824, 0.998358, 1)
+omni_range = 0.8
+
+[node name="Label3D" type="Label3D" parent="LimitedSphereLightDeactivation"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.1, 0.449931, 0)
+text = "0 times remaining"
+font_size = 16
 
 [editable path="Player"]
