@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://dalr5xxwsy6h1"]
+
+[ext_resource type="PackedScene" uid="uid://c4lccs8l5darl" path="res://addons/godot4.3_fps_character_controller/Player/player.tscn" id="1_dxgyk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dxgyk"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_h61s0"]
+sky_material = SubResource("ProceduralSkyMaterial_dxgyk")
+
+[sub_resource type="Environment" id="Environment_7ldwn"]
+background_mode = 2
+sky = SubResource("Sky_h61s0")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxgyk"]
+albedo_color = Color(0.165657, 0.165656, 0.165656, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h61s0"]
+albedo_color = Color(1, 0.152941, 1, 1)
+
+[node name="InteractionDemo" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7ldwn")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_dxgyk")]
+Move_Speed = 3.0
+Sprint_Speed = 6.0
+InputDictionary = {
+"Backward": "ui_down",
+"Escape": "ui_cancel",
+"Forward": "ui_up",
+"Interact": "interact",
+"Jump": "jump",
+"Left": "ui_left",
+"Right": "ui_right",
+"Sprint": "sprint"
+}
+Mouse_Sens = 0.1
+TiltThreshhold = 0.05
+
+[node name="Floor" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(25, 0.1, 25)
+material = SubResource("StandardMaterial3D_dxgyk")
+
+[node name="Table" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58069, 0.577512, -2.63794)
+use_collision = true
+size = Vector3(4.16138, 1, 1)
+material = SubResource("StandardMaterial3D_h61s0")
+
+[editable path="Player"]

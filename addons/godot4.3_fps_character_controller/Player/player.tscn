@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4lccs8l5darl"]
+
+[ext_resource type="Script" uid="uid://d4njps5yy7w8u" path="res://addons/godot4.3_fps_character_controller/Player/player.gd" id="1_0ewp1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g5alh"]
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_0ewp1")
+InputDictionary = {
+"Backward": "Backward",
+"Escape": "Escape",
+"Forward": "Forward",
+"Interact": "interact",
+"Jump": "Jump",
+"Left": "Left",
+"Right": "Right",
+"Sprint": "Sprint"
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_g5alh")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+
+[node name="Tilt" type="Node3D" parent="."]
+
+[node name="LTilt" type="Marker3D" parent="Tilt"]
+
+[node name="RTilt" type="Marker3D" parent="Tilt"]
