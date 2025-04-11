@@ -1,4 +1,3 @@
-@icon("res://components/interaction/3D/doors/door.svg")
 class_name Door3D extends Node3D
 
 signal opened
