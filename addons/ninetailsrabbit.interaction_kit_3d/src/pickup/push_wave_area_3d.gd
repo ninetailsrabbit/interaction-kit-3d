@@ -41,7 +41,7 @@ func _ready():
 	monitorable = false
 	monitoring = active
 	collision_layer = 0
-	collision_mask = 1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
+	collision_mask = 1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting))
 	
 	linear_damp_space_override = Area3D.SPACE_OVERRIDE_COMBINE
 	linear_damp = 0.5

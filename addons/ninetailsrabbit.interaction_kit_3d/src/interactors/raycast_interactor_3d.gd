@@ -30,7 +30,7 @@ func _enter_tree():
 	exclude_parent = true
 	collide_with_areas = true
 	collide_with_bodies = true
-	collision_mask = 1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting) | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting) 
+	collision_mask = 1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting)) | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)) 
 	
 
 func _physics_process(_delta):

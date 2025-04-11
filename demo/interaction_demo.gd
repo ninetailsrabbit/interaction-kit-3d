@@ -3,9 +3,6 @@ extends Node3D
 
 @onready var interactable_information: RichTextLabel = %InteractableInformation
 
-@onready var interactable_outline_shader: Interactable3D = $InteractableBox/Interactable3D
-@onready var interactable_outline_hull: Interactable3D = $InteractableBox2/Interactable3D
-
 @onready var dot_cursor: Control = $InteractableInformation/Control/CenterContainer/DotCursor
 
 

@@ -87,8 +87,8 @@ func _enter_tree() -> void:
 	focused.connect(on_focused)
 	unfocused.connect(on_unfocused)
 	
-	collision_layer = ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
-	collision_mask = 1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
+	collision_layer = InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting))
+	collision_mask = 1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting))
 	
 	add_to_group(GroupName)
 

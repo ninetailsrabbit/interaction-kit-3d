@@ -56,7 +56,7 @@ func get_detected_interactable():
 	var ray_query = PhysicsRayQueryParameters3D.create(
 		from, 
 		to,
-		1 | ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting) | ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting) 
+		1 | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.InteractablesCollisionLayerSetting)) | InteractionKit3DPluginUtilities.layer_to_value(ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)) 
 
 	)
 	
@@ -72,9 +72,8 @@ func get_detected_interactable():
 
 
 func interact(interactable: Interactable3D):
-	if interactable:
+	if interactable and interactable.can_be_interacted:
 		interacting = true
-		
 		interactable.interacted.emit()
 	
 
@@ -82,7 +81,6 @@ func cancel_interact(interactable: Interactable3D = current_interactable):
 	if interactable:
 		interacting = false
 		focused = false
-		
 		
 		interactable.canceled_interaction.emit()
 		

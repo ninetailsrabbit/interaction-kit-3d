@@ -30,7 +30,7 @@ signal dropped_grabbable(body: Grabbable3D)
 ## The raycast that interacts with grabbables to detect them
 @export var grabbable_interactor: GrabbableRayCastInteractor3D
 ## The current distance applied to the interactor instead of manually change it on raycast properties
-@export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance: float = 6.0:
+@export_range(0.1, 100.0, 0.01) var grabbable_interactor_distance: float = 2.0:
 	set(value):
 		if grabbable_interactor is GrabbableRayCastInteractor3D \
 			and grabbable_interactor_distance != value:
@@ -39,12 +39,7 @@ signal dropped_grabbable(body: Grabbable3D)
 			_prepare_grabbable_interactor(grabbable_interactor_distance)
 			
 @export_group("Area detector")
-@export var grabbable_area_detector: Area3D:
-	set(value):
-		if value is Area3D:
-			grabbable_area_detector = value
-			_prepare_grabbable_area_detector()
-			
+@export var grabbable_area_detector: Area3D
 @export var max_number_of_grabbables: int = 2
 
 var active_grabbables: Array[ActiveGrabbable] = []
@@ -70,8 +65,9 @@ func _input(_event: InputEvent) -> void:
 
 		for body: Grabbable3D in grabbables:
 			pull_body(body)
-			
-		grabbable_area_detector.monitoring = grabbables.is_empty()
+		
+		if grabbable_area_detector:
+			grabbable_area_detector.monitoring = grabbables.is_empty()
 		
 				
 	## TODO - SEE A WAY TO DROP A SELECTED GRABBABLE
@@ -91,6 +87,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	_prepare_available_slots()
+	_prepare_grabbable_interactor()
 	set_physics_process(false)
 	
 
@@ -180,15 +177,6 @@ func _prepare_available_slots():
 func _prepare_grabbable_interactor(distance: float = grabbable_interactor_distance):
 	if grabbable_interactor and distance >= 0.1:
 		grabbable_interactor.target_position = Vector3.FORWARD * distance
-
-
-func _prepare_grabbable_area_detector():
-	if grabbable_area_detector:
-		grabbable_area_detector.monitorable = false
-		grabbable_area_detector.monitoring = true
-		grabbable_area_detector.priority = 2
-		grabbable_area_detector.collision_layer = 0
-		grabbable_area_detector.collision_mask = ProjectSettings.get_setting(InteractionKit3DPluginSettings.GrabbablesCollisionLayerSetting)
 
 
 #region Signal callbacks
