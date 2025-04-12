@@ -64,9 +64,11 @@ func _enter_tree() -> void:
 	)
 	
 	add_autoload_singleton("GlobalInteractionEvents", "res://addons/ninetailsrabbit.interaction_kit_3d/src/global_interaction_events.gd")
+	add_autoload_singleton("ScanInteractableLayer", "res://addons/ninetailsrabbit.interaction_kit_3d/src/scan_interactable_layer.tscn")
 
 
 func _exit_tree() -> void:
+	remove_autoload_singleton("ScanInteractableLayer")
 	remove_autoload_singleton("GlobalInteractionEvents")
 	remove_custom_type("Door3D")
 	

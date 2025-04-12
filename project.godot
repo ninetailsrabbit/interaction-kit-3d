@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalInteractionEvents="*res://addons/ninetailsrabbit.interaction_kit_3d/src/global_interaction_events.gd"
+ScanInteractableLayer="*res://addons/ninetailsrabbit.interaction_kit_3d/src/scan_interactable_layer.tscn"
 
 [display]
 

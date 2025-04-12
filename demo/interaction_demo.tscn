@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://dalr5xxwsy6h1"]
+[gd_scene load_steps=47 format=3 uid="uid://dalr5xxwsy6h1"]
 
 [ext_resource type="Script" uid="uid://cpnbdadtjwity" path="res://demo/interaction_demo.gd" id="1_7ldwn"]
 [ext_resource type="PackedScene" uid="uid://c4lccs8l5darl" path="res://addons/godot4.3_fps_character_controller/Player/player.tscn" id="1_dxgyk"]
@@ -22,9 +22,10 @@ sky = SubResource("Sky_h61s0")
 ambient_light_source = 3
 ambient_light_color = Color(0.566263, 0.797861, 1, 1)
 tonemap_mode = 2
-ssr_enabled = true
 glow_enabled = true
 fog_sky_affect = 0.063
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_1oqab"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tqhql"]
 radius = 1.2
@@ -186,7 +187,7 @@ fit_content = true
 horizontal_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("1_dxgyk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1, -2.5)
 Move_Speed = 6.0
 Sprint_Speed = 9.0
 InputDictionary = {
@@ -201,6 +202,9 @@ InputDictionary = {
 }
 Mouse_Sens = 0.1
 TiltThreshhold = 0.05
+
+[node name="Camera3D" parent="Player/Head" index="0"]
+attributes = SubResource("CameraAttributesPractical_1oqab")
 
 [node name="RayCastInteractor3D" type="RayCast3D" parent="Player/Head/Camera3D" index="0"]
 target_position = Vector3(0, 0, -1.4)
@@ -289,11 +293,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.263896, 0.4, -0.174237)
 text = "FOCUS OUTLINE SHADER"
 font_size = 16
 
-[node name="Interactable3D" type="Area3D" parent="Table/InteractableBox" node_paths=PackedStringArray("interactable_mesh")]
+[node name="Interactable3D" type="Area3D" parent="Table/InteractableBox" node_paths=PackedStringArray("target_scannable_object", "interactable_mesh")]
 script = ExtResource("5_hlwqb")
 id = "brown_bow"
 title = "Brown box shader"
 title_translation_key = "BROWN_BOX"
+scannable = true
+target_scannable_object = NodePath("..")
 interactable_mesh = NodePath("..")
 outline_shader_color = Color(0.180392, 1, 0.341176, 1)
 outline_hull_color = Color(0.180392, 1, 0.341176, 1)
