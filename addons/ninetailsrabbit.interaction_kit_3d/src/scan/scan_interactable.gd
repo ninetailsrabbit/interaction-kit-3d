@@ -13,11 +13,6 @@ var current_object: Node3D:
 		if new_object != current_object:
 			current_object = new_object
 			mouse_rotator_component_3d.target = current_object
-			
-			if current_object:
-				scan_started.emit(current_object)
-			else:
-				scan_ended.emit(current_object)
 				
 			set_process_unhandled_input(current_object != null)
 
@@ -48,6 +43,7 @@ func scan(node: Node3D) -> void:
 	if current_object:
 		return
 	
+	scan_started.emit(current_object)
 	blur_camera()
 	
 	current_object = node.duplicate()
@@ -63,7 +59,10 @@ func scan(node: Node3D) -> void:
 func end_scan() -> void:
 	recover_camera()
 	
+	if current_object:
+		scan_ended.emit(current_object)
+	
 	for child: Node in marker_3d.get_children():
 		child.free()
-		
+	
 	current_object = null

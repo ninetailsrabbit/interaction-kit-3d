@@ -59,15 +59,18 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		Camera_Inp = event.relative
-
-func _process(delta: float) -> void:
-	# Camera Lock
+		
+func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed(InputDictionary["Escape"]) and _isMouseCaptured:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		_isMouseCaptured = false
 	elif Input.is_action_just_pressed(InputDictionary["Escape"]) and not _isMouseCaptured:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		_isMouseCaptured = true
+
+
+func _process(delta: float) -> void:
+	# Camera Lock
 
 	# Camera Smooth look
 	Rot_Vel = Rot_Vel.lerp(Camera_Inp * Mouse_Sens, delta * Mouse_Smooth)

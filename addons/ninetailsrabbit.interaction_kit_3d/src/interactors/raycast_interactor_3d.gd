@@ -72,7 +72,7 @@ func scan(interactable: Interactable3D = current_interactable):
 		
 		ScanInteractableLayer.scan(interactable.target_scannable_object)
 		ScanInteractableLayer.scan_ended.connect(
-			func(): 
+			func(_scanned_object: Node3D): 
 				interacting = false
 				focused = false
 				enabled = true

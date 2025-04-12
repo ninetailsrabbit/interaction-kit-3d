@@ -29,8 +29,7 @@ func scan(target: Node3D) -> void:
 
 func on_scan_ended(target: Node3D) -> void:
 	hide()
-	
-	Input.mouse_mode = original_mouse_mode
-	
 	scan_ended.emit(target)
 	control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	Input.mouse_mode = original_mouse_mode
