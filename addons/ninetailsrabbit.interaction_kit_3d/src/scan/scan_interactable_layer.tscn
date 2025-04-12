@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bcseri36yyy3n"]
 
-[ext_resource type="Script" uid="uid://b7kgtx2nwexaw" path="res://addons/ninetailsrabbit.interaction_kit_3d/src/scan_interactable_layer.gd" id="1_558pd"]
+[ext_resource type="Script" uid="uid://b7kgtx2nwexaw" path="res://addons/ninetailsrabbit.interaction_kit_3d/src/scan/scan_interactable_layer.gd" id="1_558pd"]
 [ext_resource type="PackedScene" uid="uid://m8s1gmjpojcs" path="res://addons/ninetailsrabbit.interaction_kit_3d/src/scan/scan_interactable.tscn" id="2_pyuvp"]
 
 [node name="ScanInteractableLayer" type="CanvasLayer"]
