@@ -77,6 +77,7 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	remove_autoload_singleton("ScanInteractableLayer")
 	remove_autoload_singleton("GlobalInteractionEvents")
+	remove_custom_type("MouseRotatorComponent3D")
 	remove_custom_type("Door3D")
 	
 	remove_custom_type("MouseRayCastInteractor3D")
