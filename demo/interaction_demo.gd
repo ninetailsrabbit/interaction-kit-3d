@@ -12,7 +12,7 @@ func _ready() -> void:
 	GlobalInteractionEvents.interactable_focused.connect(on_interactable_focused)
 	GlobalInteractionEvents.interactable_unfocused.connect(on_interactable_unfocused)
 	
-	for i in 100:
+	for i in 30:
 		var grabbable = Grabbable3D.new()
 		var mesh: MeshInstance3D = MeshInstance3D.new()
 		grabbable.mesh_instance = mesh
